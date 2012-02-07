@@ -755,13 +755,13 @@ class UnitOfWork implements PropertyChangedListener
                     $this->recomputeSingleEntityChangeSet($class, $entity);
                 }
                 
-                if ($hasPreUpdateListeners) {
+                if ($hasPreUpdateListeners && !empty($this->entityChangeSets[$oid])) {
                     $this->evm->dispatchEvent(Events::preUpdate, new Event\PreUpdateEventArgs(
                         $entity, $this->em, $this->entityChangeSets[$oid])
                     );
                 }
 
-                if ($this->entityChangeSets[$oid]) {
+                if (!empty($this->entityChangeSets[$oid])) {
                     $persister->update($entity);
                 }
                 unset($this->entityUpdates[$oid]);
